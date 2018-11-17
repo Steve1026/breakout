@@ -1,3 +1,4 @@
+package breakout;
 /*
  * File: Breakout.java
  * -------------------
