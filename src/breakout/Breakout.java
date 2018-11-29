@@ -17,9 +17,11 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Breakout extends GraphicsProgram {
+	
+	private static final long serialVersionUID = 997;
 
 /** Width and height of application window in pixels */
-	public static final int APPLICATION_WIDTH = 400;
+	public static final int APPLICATION_WIDTH = 404;
 	public static final int APPLICATION_HEIGHT = 600;
 
 /** Dimensions of game board (usually the same) */
@@ -61,7 +63,66 @@ public class Breakout extends GraphicsProgram {
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
-		/* You fill this in, along with any subsidiary methods */
+		
+		initGame();
+		createPaddle();
+		movePaddle();
+		playGame();
+		
+	}
+	private void initGame() {
+		
+		// rows for loop
+		for (int i=0; i<NBRICK_ROWS; i++) {
+
+            int x = BRICK_SEP;
+            int y = BRICK_Y_OFFSET + ( i * (BRICK_SEP + BRICK_HEIGHT));
+            
+            // bricks per row for loop
+            for (int j=0; j<NBRICKS_PER_ROW; j++) {  
+               
+                GRect brick = new GRect(x + (j * (BRICK_WIDTH + BRICK_SEP)), y, BRICK_WIDTH, BRICK_HEIGHT);
+                
+                //pause(500);
+
+                brick.setFilled(true);
+                
+                if (i<=1) {
+                	brick.setColor(Color.RED);
+                }
+                else if (i<=3) {
+                	brick.setColor(Color.ORANGE);
+                }
+                else if (i<=5) {
+                	brick.setColor(Color.YELLOW);
+                }
+                else if (i<=7) {
+                	brick.setColor(Color.GREEN);
+                }
+                else
+                	brick.setColor(Color.BLUE);
+            
+                add(brick);
+            }
+		}
+	}
+	private void createPaddle() {
+		
+		double x = (getWidth() - PADDLE_WIDTH) / 2;
+		
+		double y = getHeight() - PADDLE_Y_OFFSET;
+		
+		GRect paddle = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
+		
+		paddle.setFilled(true);
+		
+		add(paddle);
+	}
+	private void movePaddle() {
+		
+	}
+	private void playGame() {
+		
 	}
 
 }
