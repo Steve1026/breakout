@@ -65,9 +65,19 @@ public class Breakout extends GraphicsProgram {
 	public void run() {
 		
 		initGame();
-		createPaddle();
-		movePaddle();
+		//createPaddle();
+		addMouseListeners();
 		playGame();
+		
+		double x = (getWidth() - PADDLE_WIDTH) / 2;
+		
+		double y = getHeight() - PADDLE_Y_OFFSET;
+		
+		GRect paddle = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
+		
+		paddle.setFilled(true);
+		
+		add(paddle);
 		
 	}
 	private void initGame() {
@@ -106,23 +116,30 @@ public class Breakout extends GraphicsProgram {
             }
 		}
 	}
-	private void createPaddle() {
-		
-		double x = (getWidth() - PADDLE_WIDTH) / 2;
-		
-		double y = getHeight() - PADDLE_Y_OFFSET;
-		
-		GRect paddle = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
-		
-		paddle.setFilled(true);
-		
-		add(paddle);
+	//public void createPaddle() {
+	
+	
+	public void mousePressed(MouseEvent e) {
+		lastX = e.getX();
+		lastY = e.getY();
+		paddle = getElementAt(lastX, lastY);
 	}
-	private void movePaddle() {
+	public void mouseDragged(MouseEvent e) {
+		if (paddle != null) {
+			paddle.move(e.getX() - lastX, e.getY() - lastY);
+			lastX = e.getX();
+			lastY = e.getY();
+		}
+		
 		
 	}
 	private void playGame() {
 		
 	}
+	
+	private double lastY;
+	private double lastX;
+	private GRect paddle;
+	
 
 }
