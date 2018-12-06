@@ -64,23 +64,29 @@ public class Breakout extends GraphicsProgram {
 /** Runs the Breakout program. */
 	public void run() {
 		
-		initGame();
-		//createPaddle();
+		label = new GLabel("");
+		label.setFont("Times New Roman-36");
+		add (label, 50, 50);
+		
+		setupBoard();
+		createPaddle();
+		placeBall();
+		startGame();
 		addMouseListeners();
-		playGame();
-		
+	}
+	
+	private void createPaddle() {
+	
 		double x = (getWidth() - PADDLE_WIDTH) / 2;
-		
 		double y = getHeight() - PADDLE_Y_OFFSET;
 		
 		GRect paddle = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
 		
 		paddle.setFilled(true);
-		
 		add(paddle);
 		
 	}
-	private void initGame() {
+	private void setupBoard() {
 		
 		// rows for loop
 		for (int i=0; i<NBRICK_ROWS; i++) {
@@ -110,36 +116,49 @@ public class Breakout extends GraphicsProgram {
                 	brick.setColor(Color.GREEN);
                 }
                 else
-                	brick.setColor(Color.BLUE);
+                	brick.setColor(Color.CYAN);
             
                 add(brick);
             }
 		}
 	}
-	//public void createPaddle() {
 	
 	
 	public void mousePressed(MouseEvent e) {
-		lastX = e.getX();
-		lastY = e.getY();
-		paddle = getElementAt(lastX, lastY);
+		last = new GPoint(e.getPoint());
+		gobj = getElementAt(last);
+		
+		//GObject = getElementAt(lastX, lastY, 0, 0);
 	}
 	public void mouseDragged(MouseEvent e) {
-		if (paddle != null) {
-			paddle.move(e.getX() - lastX, e.getY() - lastY);
-			lastX = e.getX();
-			lastY = e.getY();
+		if (gobj != null) {
+			gobj.move(e.getX() - last.getX(), 0);
+			last = new GPoint(e.getPoint());
 		}
-		
-		
 	}
-	private void playGame() {
-		
+	public void mouseMoved(MouseEvent e) {
+		label.setLabel("Mouse (" + e.getX() + ", " + e.getY() + ")");
 	}
+	private void placeBall() {
+		
+		double x = (getWidth() - BALL_RADIUS) / 2;
+		double y = (getHeight() - BALL_RADIUS) / 2;
+		
+		ball = new GOval(x, y, BALL_RADIUS, BALL_RADIUS);
+		ball.setFilled(true);
+		ball.setColor(Color.BLACK);
+		add(ball);
+	}
+	private void startGame();
 	
-	private double lastY;
-	private double lastX;
-	private GRect paddle;
 	
+	
+	//private double lastX;
+	//private double lastY;
+	private GObject gobj;  // The object being dragged
+	private GPoint last;  // The last mouse position
+	private GLabel label;
+	private GOval ball; // Creates the ball
+	private double vx, vy;
 
 }
