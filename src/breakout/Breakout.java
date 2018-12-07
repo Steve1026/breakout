@@ -68,11 +68,21 @@ public class Breakout extends GraphicsProgram {
 		label.setFont("Times New Roman-36");
 		add (label, 50, 50);
 		
+		vy = 3.0;
+		vx = rgen.nextDouble(1.0, 3.0);
+		if (rgen.nextBoolean(0.5)) vx = -vx;  //need to figure out how this works!
+		
 		setupBoard();
 		createPaddle();
 		placeBall();
-		startGame();
 		addMouseListeners();
+		
+		do {
+			moveBall();
+			checkForCollision();
+			pause(50);
+		
+		} while ((ball.getX() < WIDTH) || (ball.getY() < HEIGHT));
 	}
 	
 	private void createPaddle() {
@@ -98,8 +108,6 @@ public class Breakout extends GraphicsProgram {
             for (int j=0; j<NBRICKS_PER_ROW; j++) {  
                
                 GRect brick = new GRect(x + (j * (BRICK_WIDTH + BRICK_SEP)), y, BRICK_WIDTH, BRICK_HEIGHT);
-                
-                //pause(500);
 
                 brick.setFilled(true);
                 
@@ -121,14 +129,10 @@ public class Breakout extends GraphicsProgram {
                 add(brick);
             }
 		}
-	}
-	
-	
+	}	
 	public void mousePressed(MouseEvent e) {
 		last = new GPoint(e.getPoint());
 		gobj = getElementAt(last);
-		
-		//GObject = getElementAt(lastX, lastY, 0, 0);
 	}
 	public void mouseDragged(MouseEvent e) {
 		if (gobj != null) {
@@ -149,8 +153,20 @@ public class Breakout extends GraphicsProgram {
 		ball.setColor(Color.BLACK);
 		add(ball);
 	}
-	private void startGame();
-	
+	private void moveBall() {
+		
+		ball.move(vx, vy);
+	}
+	private void checkForCollision() {
+		if((ball.getX() + BALL_RADIUS) > getWidth() || ball.getX() < 0) {
+			vx = -vx;
+		} 
+		else if (ball.getY() < 0 || (ball.getY() + BALL_RADIUS) > getHeight()) {
+			vy = -vy;
+		}
+		else;
+		
+	}
 	
 	
 	//private double lastX;
@@ -159,6 +175,7 @@ public class Breakout extends GraphicsProgram {
 	private GPoint last;  // The last mouse position
 	private GLabel label;
 	private GOval ball; // Creates the ball
-	private double vx, vy;
+	private double vx, vy; // Velocity variables for ball
+	private RandomGenerator rgen = RandomGenerator.getInstance();
 
 }
